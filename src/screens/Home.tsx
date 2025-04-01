@@ -1,6 +1,6 @@
 import { Group } from '@components/Group'
 import { HomeHeader } from '@components/HomeHeader'
-import { FlatList, VStack } from '@gluestack-ui/themed'
+import { FlatList, Heading, HStack, Text, VStack } from '@gluestack-ui/themed'
 import { useState } from 'react'
 
 export function Home() {
@@ -10,6 +10,7 @@ export function Home() {
   return (
     <VStack flex={1}>
       <HomeHeader />
+
       <FlatList
         data={groups}
         keyExtractor={(item) => item}
@@ -25,6 +26,17 @@ export function Home() {
         contentContainerStyle={{ paddingHorizontal: 32 }}
         style={{ marginVertical: 40, maxHeight: 44, minHeight: 44 }}
       />
+
+      <VStack px="$8">
+        <HStack justifyContent="space-between" mb="$5" alignItems="center">
+          <Heading color="$gray200" fontSize="$md">
+            Exercícios
+          </Heading>
+          <Text color="$gray200" fontSize="$sm" fontFamily="$body">
+            4
+          </Text>
+        </HStack>
+      </VStack>
     </VStack>
   )
 }
