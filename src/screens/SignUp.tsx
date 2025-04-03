@@ -14,8 +14,15 @@ import { Button } from '@components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { Controller, useForm } from 'react-hook-form'
 
+type FormDataProps = {
+  name: string
+  email: string
+  password: string
+  passwordConfirm: string
+}
+
 export function SignUp() {
-  const { control, handleSubmit } = useForm()
+  const { control, handleSubmit } = useForm<FormDataProps>()
 
   const navigation = useNavigation()
 
@@ -23,8 +30,13 @@ export function SignUp() {
     navigation.goBack()
   }
 
-  function handleSignUp(data: unknown) {
-    console.log({ data })
+  function handleSignUp({
+    name,
+    email,
+    password,
+    passwordConfirm,
+  }: FormDataProps) {
+    console.log({ name, email, password, passwordConfirm })
   }
 
   return (
@@ -95,7 +107,7 @@ export function SignUp() {
 
             <Controller
               control={control}
-              name="password_confirm"
+              name="passwordConfirm"
               render={({ field: { onChange, value } }) => (
                 <Input
                   placeholder="Confirmar a Senha"
