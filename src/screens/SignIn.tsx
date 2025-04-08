@@ -17,6 +17,7 @@ import { AuthNavigatorRoutesProps } from '@routes/auth.routes'
 import { Controller, useForm } from 'react-hook-form'
 import { useAuth } from '@hooks/useAuth'
 import { AppError } from '@utils/AppError'
+import { useState } from 'react'
 
 type FormData = {
   email: string
@@ -24,6 +25,8 @@ type FormData = {
 }
 
 export function SignIn() {
+  const [isLoading, setIsLoading] = useState(false)
+
   const { singIn } = useAuth()
 
   const toast = useToast()
@@ -42,6 +45,7 @@ export function SignIn() {
 
   async function handleSignIn({ email, password }: FormData) {
     try {
+      setIsLoading(true)
       await singIn(email, password)
     } catch (error) {
       const isAppError = error instanceof AppError
@@ -49,6 +53,8 @@ export function SignIn() {
       const title = isAppError
         ? error.message
         : 'Não foi possível entrar. Tente novamente mais tarde.'
+
+      setIsLoading(false)
 
       toast.show({
         title,
