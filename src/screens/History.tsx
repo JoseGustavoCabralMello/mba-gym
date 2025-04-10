@@ -6,19 +6,11 @@ import { SectionList } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import { api } from '@services/api'
 import { AppError } from '@utils/AppError'
+import { HistoryByDayDTO } from '@dtos/HistoryByDayDTO'
 
 export function History() {
   const [isLoading, setIsLoading] = useState(true)
-  const [exercises, setExercises] = useState([
-    {
-      title: '22.07.24',
-      data: ['Puxada frontal', 'Remada unilateral'],
-    },
-    {
-      title: '23.07.24',
-      data: ['Puxada frontal'],
-    },
-  ])
+  const [exercises, setExercises] = useState<HistoryByDayDTO[]>([])
 
   const toast = useToast()
 
@@ -27,7 +19,7 @@ export function History() {
       setIsLoading(true)
       const response = await api.get('/history')
 
-      console.log(response.data)
+      setExercises(response.data)
     } catch (error) {
       const isAppError = error instanceof AppError
       const title = isAppError
@@ -56,7 +48,7 @@ export function History() {
 
       <SectionList
         sections={exercises}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => <HistoryCard />}
         renderSectionHeader={({ section }) => (
           <Heading color="$gray200" fontSize="$md" mt="$10" mb="$3">
