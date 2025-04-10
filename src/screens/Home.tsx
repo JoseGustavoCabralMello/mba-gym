@@ -19,7 +19,7 @@ export function Home() {
 
   const [exercises, setExercises] = useState<ExerciseDTO[]>([])
   const [groups, setGroups] = useState<string[]>([])
-  const [groupSelected, setGroupSelected] = useState('Costas')
+  const [groupSelected, setGroupSelected] = useState('Antebraço')
 
   const toast = useToast()
   const navigation = useNavigation<AppNavigatorRoutesProps>()
