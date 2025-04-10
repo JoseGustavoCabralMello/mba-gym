@@ -10,6 +10,8 @@ import * as FileSystem from 'expo-file-system'
 import { ToastMessage } from '@components/ToastMessage'
 import { useAuth } from '@hooks/useAuth'
 import { Controller, useForm } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 type FormDataProps = {
   name: string
@@ -19,19 +21,27 @@ type FormDataProps = {
   confirm_password: string
 }
 
+const profileSchema = yup.object({
+  name: yup.string().required('Informe o nome'),
+})
+
 export function Profile() {
   const [userPhoto, setUserPhoto] = useState(
     'https://github.com/arthurrios.png',
   )
 
   const toast = useToast()
-
   const { user } = useAuth()
-  const { control, handleSubmit } = useForm<FormDataProps>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
     defaultValues: {
       name: user.name,
       email: user.email,
     },
+    resolver: yupResolver(profileSchema),
   })
 
   async function handleUserPhotoSelect() {
@@ -113,6 +123,7 @@ export function Profile() {
                     placeholder="Nome"
                     onChangeText={onChange}
                     value={value}
+                    errorMessage={errors.name?.message}
                   />
                 )}
               />
@@ -164,6 +175,7 @@ export function Profile() {
                     placeholder="Nova senha"
                     secureTextEntry
                     onChangeText={onChange}
+                    errorMessage={errors.password?.message}
                   />
                 )}
               />
@@ -176,6 +188,7 @@ export function Profile() {
                     placeholder="Confirme a nova senha"
                     secureTextEntry
                     onChangeText={onChange}
+                    errorMessage={errors.confirm_password?.message}
                   />
                 )}
               />
