@@ -1,10 +1,14 @@
 import { HistoryCard } from '@components/HistoryCard'
 import { ScreenHeader } from '@components/ScreenHeader'
-import { Heading, Text, VStack } from '@gluestack-ui/themed'
-import { useState } from 'react'
+import { Heading, Text, useToast, VStack } from '@gluestack-ui/themed'
+import { useCallback, useState } from 'react'
 import { SectionList } from 'react-native'
+import { useFocusEffect } from '@react-navigation/native'
+import { api } from '@services/api'
+import { AppError } from '@utils/AppError'
 
 export function History() {
+  const [isLoading, setIsLoading] = useState(true)
   const [exercises, setExercises] = useState([
     {
       title: '22.07.24',
@@ -15,6 +19,36 @@ export function History() {
       data: ['Puxada frontal'],
     },
   ])
+
+  const toast = useToast()
+
+  async function fetchHistory() {
+    try {
+      setIsLoading(true)
+      const response = await api.get('/history')
+
+      console.log(response.data)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível carregar os detalhes do exercício'
+
+      toast.show({
+        title,
+        placement: 'top',
+        bgColor: 'red.500',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchHistory()
+    }, []),
+  )
 
   return (
     <VStack flex={1}>
