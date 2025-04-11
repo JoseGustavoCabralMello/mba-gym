@@ -14,6 +14,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { api } from '@services/api'
 import { AppError } from '@utils/AppError'
+import defaulUserPhotoImg from '@assets/userPhotoDefault.png'
 
 type FormDataProps = {
   name: string
@@ -177,7 +178,11 @@ export function Profile() {
         <ScrollView contentContainerStyle={{ paddingBottom: 36 }}>
           <Center mt="$6" px="$10">
             <UserPhoto
-              source={{ uri: userPhoto }}
+              source={
+                user.avatar
+                  ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+                  : defaulUserPhotoImg
+              }
               size="xl"
               alt="Imagem do usuário"
             />
